@@ -7,7 +7,6 @@ class NEODatabase:
     help fetch NEOs by primary designation or by name and to help speed up
     querying for close approaches that match criteria.
     """
-
     def __init__(self, neos, approaches):
         """Create a new `NEODatabase`.
 
@@ -51,7 +50,6 @@ class NEODatabase:
         :param designation: The primary designation of the NEO to search for.
         :return: The `NearEarthObject` with the desired primary designation, or `None`.
         """
-        
         return self._neos_by_designation.get(designation, None)
 
     def get_neo_by_name(self, name):
@@ -70,7 +68,6 @@ class NEODatabase:
         """
         return self._neos_by_name.get(name, None)
 
-
     def query(self, filters=()):
         """Query close approaches to generate those that match a collection of filters.
 
@@ -85,9 +82,12 @@ class NEODatabase:
         :param filters: A collection of filters capturing user-specified criteria.
         :return: A stream of matching `CloseApproach` objects.
         """
-        if not filters:
+        if filters == ():
             return self._approaches
         
         for approach in self._approaches:
-            if all(f(approach) for f in filters):
+            matches = []
+            for filter in filters:
+                matches.append(filter(approach))
+            if all(matches):
                 yield approach

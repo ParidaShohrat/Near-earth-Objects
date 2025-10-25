@@ -1,21 +1,4 @@
-"""Provide filters for querying close approaches and limit the generated results.
 
-The `create_filters` function produces a collection of objects that is used by
-the `query` method to generate a stream of `CloseApproach` objects that match
-all of the desired criteria. The arguments to `create_filters` are provided by
-the main module and originate from the user's command-line options.
-
-This function can be thought to return a collection of instances of subclasses
-of `AttributeFilter` - a 1-argument callable (on a `CloseApproach`) constructed
-from a comparator (from the `operator` module), a reference value, and a class
-method `get` that subclasses can override to fetch an attribute of interest from
-the supplied `CloseApproach`.
-
-The `limit` function simply limits the maximum number of values produced by an
-iterator.
-
-You'll edit this file in Tasks 3a and 3c.
-"""
 import operator
 import itertools
 
@@ -39,7 +22,6 @@ class AttributeFilter:
     Concrete subclasses can override the `get` classmethod to provide custom
     behavior to fetch a desired attribute from the given `CloseApproach`.
     """
-
     def __init__(self, op, value):
         """Construct a new `AttributeFilter` from an binary predicate and a reference value.
 
@@ -72,7 +54,6 @@ class AttributeFilter:
 
     def __repr__(self):
         return f"{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})"
-
 
 class DateFilter(AttributeFilter):
     """Filter for close approaches based on a specific date."""
@@ -137,7 +118,6 @@ class HazardousFilter(AttributeFilter):
         :return: The hazardous status of the associated NEO, or False if not available.
         """
         return approach.neo.hazardous if approach.neo else False
-
 
 def create_filters(
         date=None, start_date=None, end_date=None,
@@ -210,6 +190,7 @@ def create_filters(
     return filters
 
 
+
 def limit(iterator, n=None):
     """Produce a limited stream of values from an iterator.
 
@@ -219,7 +200,7 @@ def limit(iterator, n=None):
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
     """
-    if n is None or n == 0:
+    if (n is not None) and (n != 0):
         return itertools.islice(iterator, n)
     else:
         return iterator

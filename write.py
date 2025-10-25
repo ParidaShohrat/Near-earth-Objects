@@ -17,7 +17,7 @@ def write_to_csv(results, filename):
         'datetime_utc', 'distance_au', 'velocity_km_s',
         'designation', 'name', 'diameter_km', 'potentially_hazardous'
     )
-
+    
     with open(filename, 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
@@ -25,7 +25,7 @@ def write_to_csv(results, filename):
         for approach in results:
             neo = approach.neo
             writer.writerow({
-                'datetime_utc': approach.timestr,
+                'datetime_utc': approach.time_str,
                 'distance_au': approach.distance,
                 'velocity_km_s': approach.velocity,
                 'designation': neo.designation if neo else '',
@@ -33,7 +33,6 @@ def write_to_csv(results, filename):
                 'diameter_km': neo.diameter if neo.diameter else float('nan'),
                 'potentially_hazardous': neo.hazardous if not neo.hazardous else False
             })
-
 
 
 def write_to_json(results, filename):
